@@ -4,18 +4,29 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-public class City {
+public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
     private String name;
 
-    public Long getId() {
+    @ManyToMany(mappedBy = "roles")
+    private Set<User> users;
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users) {
+        this.users = users;
+    }
+
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -29,6 +40,6 @@ public class City {
 
     @Override
     public String toString() {
-        return name;
+        return  name;
     }
 }

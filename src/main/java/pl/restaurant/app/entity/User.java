@@ -1,37 +1,67 @@
 package pl.restaurant.app.entity;
 
+import org.springframework.security.core.GrantedAuthority;
+
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.Collection;
+import java.util.Set;
 
 @Entity
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
-
+    private Long id;
+    @Size(min=5, max = 30)
     private String login;
+    @Size(min=5)
     private String password;
+    @Email
     private String email;
-    private String type;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private UserDetails userDetails;
+    @ManyToOne(cascade = CascadeType.MERGE)
+    private City city;
+    private int enabled;
 
-    public User(long id, String login, String password, String email, String type) {
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles;
+
+
+    public User(long id, String login, String password, String email, City city, int enabled, Set<Role> role) {
         this.id = id;
+
         this.login = login;
         this.password = password;
         this.email = email;
-        this.type = type;
+        this.city = city;
+        this.enabled = enabled;
+        this.roles = role;
+
+    }
+
+    public City getCity() {
+        return city;
+    }
+
+    public void setCity(City city) {
+        this.city = city;
     }
 
     public User() {
     }
 
-    public long getId() {
+
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -59,12 +89,21 @@ public class User {
         this.email = email;
     }
 
-    public String getType() {
-        return type;
+    public int getEnabled() {
+        return enabled;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public void setEnabled(int enabled) {
+        this.enabled = enabled;
+    }
+
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     @Override
@@ -74,7 +113,8 @@ public class User {
                 ", login='" + login + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
-                ", type='" + type + '\'' +
+                ", enabled='" + enabled + '\'' +
                 '}';
     }
+
 }

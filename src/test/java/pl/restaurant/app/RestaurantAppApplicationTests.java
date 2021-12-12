@@ -1,12 +1,11 @@
 package pl.restaurant.app;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class RestaurantAppApplicationTests {
 
-    @Test
     void contextLoads() {
     }
 

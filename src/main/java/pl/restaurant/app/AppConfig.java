@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.LocaleContextResolver;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import javax.validation.Validator;
@@ -18,13 +20,19 @@ import java.util.Locale;
 @ComponentScan(basePackages = "pl.restaurant")
 @EnableJpaRepositories(basePackages = "pl.restaurant.app.repository")
 @EnableTransactionManagement
-public class AppConfig {
+public class AppConfig implements WebMvcConfigurer {
 
     @Bean(name="localeResolver")
     public LocaleContextResolver getLocaleContextResolver() {
         SessionLocaleResolver localeResolver = new SessionLocaleResolver();
         localeResolver.setDefaultLocale(new Locale("pl","PL"));
         return localeResolver;
+    }
+
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        registry.addViewController("/login").setViewName("login");
+        registry.addViewController("/403").setViewName("403");
     }
 
    /* @Bean

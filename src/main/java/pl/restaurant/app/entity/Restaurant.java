@@ -1,20 +1,36 @@
 package pl.restaurant.app.entity;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import org.hibernate.annotations.Type;
+import org.hibernate.validator.constraints.Range;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
 public class Restaurant {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
+    @Size(min = 5, max = 50)
     private String name;
+    @Size(min=4, max=50)
     private String street;
     private int streetNumber;
+    @Size(min = 5, max = 25)
     private String cuisine;
+    @Range(min=1, max = 10, message = "Podaj ocenę od 1 do 10")
     private int rating;
-    private String city;
+    @OneToOne
+    @NotEmpty
+    private City city;
+
+    @ManyToOne
+    private User vendor;
+
 
     public long getId() {
         return id;
@@ -64,11 +80,19 @@ public class Restaurant {
         this.rating = rating;
     }
 
-    public String getCity() {
+    public City getCity() {
         return city;
     }
 
-    public void setCity(String city) {
+    public void setCity(City city) {
         this.city = city;
     }
+    public User getVendor() {
+        return vendor;
+    }
+
+    public void setVendor(User vendor) {
+        this.vendor = vendor;
+    }
+
 }
