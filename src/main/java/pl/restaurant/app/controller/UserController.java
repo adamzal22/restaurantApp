@@ -89,6 +89,12 @@ public class UserController {
 
     }
 
+    @GetMapping("/findRestaurant")
+    public String findRestaurant(@RequestParam Long idToFind, Model model){
+        model.addAttribute("restaurant", restaurantRepository.getById(idToFind));
+        return "user/showRest";
+    }
+
 /*    @GetMapping("/admin")
     @ResponseBody
     public String userInfo(@AuthenticationPrincipal UserDetails customUser) {

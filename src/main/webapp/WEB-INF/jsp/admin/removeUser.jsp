@@ -1,3 +1,4 @@
+<%@ page contentType="text/html; charset=UTF-8" %>
 <h2>Czy na pewno chcesz usunać użytkownika? </h2>
 
 <form method="post">

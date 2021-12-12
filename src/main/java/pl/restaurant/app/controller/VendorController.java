@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.restaurant.app.entity.*;
 import pl.restaurant.app.repository.CityRepository;
@@ -13,6 +14,7 @@ import pl.restaurant.app.repository.UserRepository;
 import pl.restaurant.app.search.RestaurantSearchMode;
 import pl.restaurant.app.service.UserService;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Controller
@@ -163,7 +165,10 @@ public class VendorController {
     }
 
     @PostMapping("/dashboard/editRestaurant")
-    public String saveEditRestaurant (@ModelAttribute("restaurant") Restaurant restaurant, @AuthenticationPrincipal CurrentUser currentUser){
+    public String saveEditRestaurant (@ModelAttribute("restaurant") @Valid Restaurant restaurant, BindingResult result, @AuthenticationPrincipal CurrentUser currentUser){
+        if (result.hasErrors()) {
+            return "vendor/editRestaurant";
+        }
         restaurant.setVendor(currentUser.getUser());
         restaurantRepository.save(restaurant);
         return "redirect:/vendor/dashboard";

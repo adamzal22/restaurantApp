@@ -19,7 +19,7 @@
 <hr>
 <ul>
     <c:forEach items="${restaurants}" var="r">
-        <li> <strong><c:out value="${r.name}"/></strong><text>   OCENA: </text><strong><c:out value="${r.rating}"/></strong></li>
+        <li> <a href="/user/findRestaurant?idToFind=${r.id}"><strong><c:out value="${r.name}"/></strong></a><text>   OCENA: </text><strong><c:out value="${r.rating}"/></strong></li>
         <br />
 
         <hr>

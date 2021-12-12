@@ -25,7 +25,6 @@ public class Restaurant {
     @Range(min=1, max = 10, message = "Podaj ocenę od 1 do 10")
     private int rating;
     @OneToOne
-    @NotEmpty
     private City city;
 
     @ManyToOne

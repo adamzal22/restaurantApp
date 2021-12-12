@@ -8,7 +8,7 @@
 
 <hr>
 <c:forEach items="${restaurants}" var="r">
-    <strong><c:out value="${r.name}: ${r.rating}"/></strong><br>
+    <strong><c:out value="${r.name}   OCENA: ${r.rating}"/></strong><br>
     </strong>
     <br />
     <a href="editRestaurant?idToEdit=${r.id}">

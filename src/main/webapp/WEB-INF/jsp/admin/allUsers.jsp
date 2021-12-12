@@ -12,8 +12,7 @@
 <c:forEach items="${users}" var="u">
 
 
-    <a href="user/${u.id}">LOGIN: ${u.login} | EMAIL: ${u.email}</a><br>
-    </strong>
+    <Strong>LOGIN: ${u.login} | EMAIL: ${u.email}</Strong><br>
     <br />
     <a href="editUser?idToEdit=${u.id}">
         Edytuj

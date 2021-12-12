@@ -5,6 +5,12 @@
 <html>
 <head>
     <title>Dodaj knajpę</title>
+    <style>
+        .error {
+            color: red;
+            border: 2px solid;
+        }
+    </style>
 </head>
 <body>
 
@@ -12,11 +18,14 @@
 
     <form:hidden path="id"/><br/>
     nazwa: <form:input path="name"/><br/>
+    <form:errors path="name" cssClass="error"/>
     kuchnia: <form:input path="cuisine"/><br/>
+    <form:errors path="cuisine" cssClass="error"/>
     miasto: <form:select path="city.id" items="${cities}" itemLabel="name" itemValue="id"/><br/>
     Rating: <form:input path="rating"/><br/>
+    <form:errors path="rating" cssClass="error"/>
     Ulica: <form:input path="street"/>, <form:input path="streetNumber"/><br/>
-
+    <form:errors path="street" cssClass="error"/>
 
     <input type="submit" value="Dodaj"><br/>
 

@@ -3,14 +3,15 @@ package pl.restaurant.app.controller;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import pl.restaurant.app.entity.*;
-import pl.restaurant.app.repository.CityRepository;
-import pl.restaurant.app.repository.PostRepository;
-import pl.restaurant.app.repository.RestaurantRepository;
-import pl.restaurant.app.repository.UserRepository;
+import pl.restaurant.app.repository.*;
 import pl.restaurant.app.service.UserService;
 
+import javax.validation.Valid;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 @Controller
@@ -21,13 +22,29 @@ public class AdminController {
     private final RestaurantRepository restaurantRepository;
     private final UserService userService;
     private final CityRepository cityRepository;
+    private final RoleRepository roleRepository;
 
-    public AdminController(UserRepository userRepository, PostRepository postRepository, RestaurantRepository restaurantRepository, UserService userService, CityRepository cityRepository) {
+    public AdminController(UserRepository userRepository, PostRepository postRepository,
+                           RestaurantRepository restaurantRepository, UserService userService,
+                           CityRepository cityRepository, RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.postRepository = postRepository;
         this.restaurantRepository = restaurantRepository;
         this.userService = userService;
         this.cityRepository = cityRepository;
+        this.roleRepository = roleRepository;
+    }
+
+    @GetMapping("/create-admin")
+    @ResponseBody
+    public String createAdmin() {
+        User user = new User();
+        user.setLogin("admin");
+        user.setPassword("admin");
+        Role userRole = roleRepository.findByName("ROLE_ADMIN");
+        user.setRoles(new HashSet<Role>(Arrays.asList(userRole)));
+        userRepository.save(user);
+        return "admin";
     }
 
     @GetMapping("/all")
@@ -117,14 +134,17 @@ public class AdminController {
     @GetMapping("/editRestaurant")
     public String editRestaurant(@RequestParam Long idToEdit, Model model){
         model.addAttribute("restaurant", restaurantRepository.getById(idToEdit));
-        return "vendor/editRestaurant";
+        return "admin/editRestaurant";
     }
 
     @PostMapping("/editRestaurant")
-    public String saveEditRestaurant (@ModelAttribute("restaurant") Restaurant restaurant, @AuthenticationPrincipal CurrentUser currentUser){
+    public String saveEditRestaurant (@ModelAttribute("restaurant") @Valid Restaurant restaurant, BindingResult result, @AuthenticationPrincipal CurrentUser currentUser){
+        if (result.hasErrors()) {
+            return "vendor/editRestaurant";
+        }
         restaurant.setVendor(currentUser.getUser());
         restaurantRepository.save(restaurant);
-        return "redirect:/vendor/dashboard";
+        return "redirect:/admin/allRestaurants";
     }
 
     @ModelAttribute("restaurants")

@@ -32,6 +32,9 @@ public class LoginController {
         } else if (roleID.contains(2L)) {
             //render vendor page
             return "redirect:vendor/dashboard";
+        } else if (roleID.contains(5L)) {
+            //render vendor page
+            return "redirect:admin/all";
         } else
         return "/403";
     }
